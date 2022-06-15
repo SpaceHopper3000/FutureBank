@@ -14,7 +14,7 @@ namespace FutureBank.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("get_current_rate")]
+        [HttpGet("get-current-rate")]
         public async Task<IActionResult> GetCurrentRateAsync()
         {
             return Ok(new InterestRate { Id = 1, Rate = 2.5 });

@@ -21,7 +21,7 @@ namespace FutureBank.Services
             HttpResponseMessage response;
             try
             {
-                response = await _httpClient.GetAsync("/InterestRate/get-current-rate");
+                response = await _httpClient.GetAsync("InterestRate/get-current-rate");
             }
             catch (Exception ex)
             {

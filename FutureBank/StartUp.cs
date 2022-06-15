@@ -23,7 +23,6 @@ namespace FutureBank
 
         public async void Init()
         {
-
             var rate = await _interestRateService.GetCurrentRate();
 
             BankAccount? newBankAccount = null;
