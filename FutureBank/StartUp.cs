@@ -23,7 +23,13 @@ namespace FutureBank
 
         public async void Init()
         {
-            var rate = await _interestRateService.GetCurrentRate();
+            Console.WriteLine("Welcome to the Bank of the Future!");
+            Console.WriteLine("Getting Interest Rate from Server..");
+
+            //Cannot run Asynchronously as Main Thread kills the process upon completion
+            var task = Task.Run(() => _interestRateService.GetCurrentRate());
+            task.Wait();
+            var rate = task.Result?.Rate;
 
             BankAccount? newBankAccount = null;
             SavingsAccount? newSavingsAccount = null;
@@ -60,7 +66,7 @@ namespace FutureBank
             var id = newSavingsAccount?.Id ?? newBankAccount?.Id;
             Console.WriteLine($"New Account opened: {id}");
 
-            if (accountTypeId == 4) Console.WriteLine($"Interest Rate = {newSavingsAccount.InterestRate}%");
+            if (accountTypeId == 4) Console.WriteLine($"Interest Rate = {rate}%");
 
             var marketing = new Marketing();
             Console.WriteLine($"{marketing.Onboard()}");
@@ -80,17 +86,16 @@ namespace FutureBank
         //A static class cannot be instantiated. In other words, you cannot use the new operator to create a variable of the class type.
         private static string GetAccountName()
         {
-            Console.WriteLine("Welcome to the Bank of the Future!");
             Console.WriteLine("Please enter the name you would like on your account...");
 
             var accountName = Console.ReadLine().Trim();
-            if (accountName == null)
+            if (string.IsNullOrEmpty(accountName))
             {
                 Console.WriteLine("Oops, try that again! value can't be empty. How would we know who owes us money?");
                 accountName = Console.ReadLine().Trim();
             }
 
-            return accountName ?? "Not Given";
+            return string.IsNullOrEmpty(accountName) ? accountName : "Not Found";
         }
 
         private static int SelectAccountType()

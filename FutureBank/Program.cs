@@ -11,7 +11,7 @@ namespace FutureBank
         static void Main(string[] args)
         {
             //Wait for API project to load
-            Thread.Sleep(10000);
+            Thread.Sleep(5000);
 
             var services = new ServiceCollection();
             ConfigureServices(services);
@@ -19,15 +19,16 @@ namespace FutureBank
                     .BuildServiceProvider()
                     .GetService<StartUp>()
                     .Init();
+
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
             //Base IIS P
-            var baseAddress = new Uri("https://localhost:44347");
+            var baseAddress = new Uri("https://localhost:7143");
 
             services.AddSingleton<IAccountService, AccountService>();
-            services.AddHttpClient<IInterestRateService, InterestRateService>(client => { client.BaseAddress = baseAddress; } );
+            services.AddHttpClient<IInterestRateService, InterestRateService>(client => { client.BaseAddress = baseAddress; });
         }
     }
 }

@@ -18,20 +18,15 @@ namespace FutureBank.Services
 
         public async Task<InterestRate> GetCurrentRate()
         {
-            HttpResponseMessage response;
-            try
+            var options = new JsonSerializerOptions
             {
-                response = await _httpClient.GetAsync("InterestRate/get-current-rate");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return null;
-            }
+                PropertyNameCaseInsensitive = true
+            };
 
+            var response = await _httpClient.GetAsync("InterestRate/get-current-rate");
 
             if (response.IsSuccessStatusCode)
-                return await JsonSerializer.DeserializeAsync<InterestRate>(await response.Content.ReadAsStreamAsync());
+                return await JsonSerializer.DeserializeAsync<InterestRate>(await response.Content.ReadAsStreamAsync(), options);
 
             return null;
         }
