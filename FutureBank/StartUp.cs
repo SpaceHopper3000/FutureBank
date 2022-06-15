@@ -13,14 +13,19 @@ namespace FutureBank
     public class StartUp
     {
         private readonly IAccountService _accountService;
+        private readonly IInterestRateService _interestRateService;
 
-        public StartUp(IAccountService accountService)
+        public StartUp(IAccountService accountService, IInterestRateService interestRateService)
         {
             _accountService = accountService;
+            _interestRateService = interestRateService;
         }
 
         public async void Init()
         {
+
+            var rate = await _interestRateService.GetCurrentRate();
+
             BankAccount? newBankAccount = null;
             SavingsAccount? newSavingsAccount = null;
 
@@ -47,7 +52,8 @@ namespace FutureBank
             {
                 newSavingsAccount = await _accountService.CreateSavingsAccount(accountName, accountTypeId);
 
-            } else
+            }
+            else
             {
                 newBankAccount = await _accountService.CreateBankAccount(accountName, accountTypeId);
             }
@@ -57,11 +63,11 @@ namespace FutureBank
 
             if (accountTypeId == 4) Console.WriteLine($"Interest Rate = {newSavingsAccount.InterestRate}%");
 
-            Marketing _marketing = new Marketing();
-            Console.WriteLine($"{_marketing.Onboard()}");
+            var marketing = new Marketing();
+            Console.WriteLine($"{marketing.Onboard()}");
 
-            OnlineBanking _olb = new OnlineBanking();
-            Console.WriteLine($"{_olb.Onboard()}");
+            var olb = new OnlineBanking();
+            Console.WriteLine($"{olb.Onboard()}");
 
             Console.WriteLine("Thank you for joining us here at FutureBank! Where the future, is now.");
 
@@ -94,7 +100,7 @@ namespace FutureBank
 
             Console.WriteLine($"1: {AccountTypeId.PremiumAccount}");
             Console.WriteLine($"2: {AccountTypeId.OkAccount}");
-            Console.WriteLine($"3: {AccountTypeId.RubbishAccount}"); 
+            Console.WriteLine($"3: {AccountTypeId.RubbishAccount}");
             Console.WriteLine($"4: {AccountTypeId.SuperSaverAccount}");
 
             var accountChoice = Console.ReadLine().Trim();

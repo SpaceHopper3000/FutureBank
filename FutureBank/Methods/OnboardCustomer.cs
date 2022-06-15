@@ -12,6 +12,7 @@ namespace FutureBank.Methods
         public abstract string Onboard();
     }
 
+    //Polymorphism uses those methods to perform different tasks. This allows us to perform a single action in different ways.
     class Marketing : OnboardCustomer
     {
         public override string Onboard()
